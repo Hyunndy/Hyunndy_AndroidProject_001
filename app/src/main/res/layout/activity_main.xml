@@ -7,77 +7,41 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/textView"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="현지는 어디가 제일 예쁠까?"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:max="100"
+        android:progress="0" />
 
-    <RadioGroup
-        android:id="@+id/RadioGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <RadioButton
-            android:id="@+id/radioButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="눈"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-        <RadioButton
-            android:id="@+id/radioButton2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="코"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-        <RadioButton
-            android:id="@+id/radioButton3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="입"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-    </RadioGroup>
-
-    <TextView
-        android:id="@+id/textView2"
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large.Inverse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="현지는 어디 살을 제일 빼고 싶을까?"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:max="100"
+        android:progress="0" />
 
-    <RadioGroup
-        android:id="@+id/RadioGroup2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <ProgressBar
+        android:id="@+id/progressBar3"
+        style="@android:style/Widget.Holo.Light.ProgressBar.Large.Inverse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="0" />
 
-        <RadioButton
-            android:id="@+id/radioButton6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="팔"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-        <RadioButton
-            android:id="@+id/radioButton5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="다리"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-        <RadioButton
-            android:id="@+id/radioButton4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="허리"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-    </RadioGroup>
+    <ProgressBar
+        android:id="@+id/progressBar4"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="0" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="체크 상태 가져오기" />
+        android:text="5만큼 증가하기" />
 </LinearLayout>
