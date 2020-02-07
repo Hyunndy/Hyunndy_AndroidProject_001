@@ -6,6 +6,7 @@ import android.widget.TextView
 import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
+import android.widget.RadioGroup
 import kotlinx.android.synthetic.main.activity_main.*
 import org.w3c.dom.Text
 
@@ -15,74 +16,85 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        /*
         button.setOnClickListener { view ->
-            textView6.text = " ";
 
-            if(checkBox.isChecked)
-            {
-                //문자열 뒤에 추가적으로 붙게 되는것.
-                textView6.append("현지는 존예이다\n");
+            when (RadioGroup.checkedRadioButtonId) {
+                R.id.radioButton ->
+                    textView.text = "눈";
+                R.id.radioButton2 ->
+                    textView.text = "코";
+                R.id.radioButton3 ->
+                    textView.text = "입";
             }
-            if(checkBox2.isChecked)
-            {
-                textView6.append("현지는 지존이다\n");
+
+            when (RadioGroup2.checkedRadioButtonId) {
+                R.id.radioButton4 ->
+                    textView2.text = "팔";
+                R.id.radioButton5 ->
+                    textView2.text = "다리";
+                R.id.radioButton6 ->
+                    textView2.text = "허리";
             }
-            if(checkBox3.isChecked)
+        }
+        */
+
+
+       // var Listener2 = RadioListener();
+       // RadioGroup.setOnCheckedChangeListener(Listener2);
+       // RadioGroup2.setOnCheckedChangeListener(Listener2);
+
+        RadioGroup.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId)
             {
-                textView6.append("거짓입니다.\n");
+                R.id.radioButton->
+                    textView.text = "체크 이벤트 : 눈";
+                R.id.radioButton2->
+                    textView.text = "체크 이벤트 : 코";
+                R.id.radioButton3->
+                    textView.text = "체크 이벤트 : 입";
             }
         }
 
-
-        button2.setOnClickListener { view ->
-            checkBox.isChecked = true;
-            checkBox2.isChecked = true;
-            checkBox3.isChecked = true;
-        }
-
-        button3.setOnClickListener { view ->
-            checkBox.toggle();
-            checkBox2.toggle();
-            checkBox3.toggle();
-        }
-
-        var listener2 = CheckBoxListener();
-        checkBox.setOnCheckedChangeListener(listener2);
-
-        checkBox2.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked)
+        RadioGroup2.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId)
             {
-                textView6.text = ("이벤트 : 체크박스 2가 체크되었습니다.");
-            }
-            else
-            {
-                textView6.text = ("이벤트 : 체크박스 2가 체크되지않았습니다.");
-            }
-        }
-
-        checkBox3.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked)
-            {
-                textView6.text = ("이벤트 : 체크박스 3가 체크되었습니다.");
-            }
-            else
-            {
-                textView6.text = ("이벤트 : 체크박스 3가 체크되지않았습니다.");
+                R.id.radioButton->
+                    textView2.text = "체크 이벤트 : 눈";
+                R.id.radioButton2->
+                    textView2.text = "체크 이벤트 : 코";
+                R.id.radioButton3->
+                    textView2.text = "체크 이벤트 : 입";
             }
         }
 
     }
 
-    inner class CheckBoxListener:CompoundButton.OnCheckedChangeListener
+    inner class RadioListener:RadioGroup.OnCheckedChangeListener
     {
-        override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-            if(isChecked)
+        override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
+            when(group?.id)
             {
-                textView6.text = "이벤트 : 체크박스 1이 체크되었다.";
-            }
-            else
-            {
-                textView6.text = "이벤트 : 체크박스 1이 해제되었다.";
+                R.id.RadioGroup ->
+                    when(checkedId)
+                    {
+                        R.id.radioButton->
+                            textView.text = "체크 이벤트 : 눈";
+                        R.id.radioButton2->
+                            textView.text = "체크 이벤트 : 코";
+                        R.id.radioButton3->
+                            textView.text = "체크 이벤트 : 입";
+                    }
+                R.id.RadioGroup2 ->
+                    when(checkedId) {
+                        R.id.radioButton4 ->
+                            textView2.text = "체크 이벤트 : 허리";
+                        R.id.radioButton5 ->
+                            textView2.text = "체크 이벤트 : 다리";
+                        R.id.radioButton6 ->
+                            textView2.text = "체크 이벤트 : 팔";
+                    }
             }
         }
     }
