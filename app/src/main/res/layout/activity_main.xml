@@ -7,41 +7,50 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="100"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="10"
         android:progress="0" />
 
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large.Inverse"
+    <SeekBar
+        android:id="@+id/seekBar2"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="100"
-        android:progress="0" />
-
-    <ProgressBar
-        android:id="@+id/progressBar3"
-        style="@android:style/Widget.Holo.Light.ProgressBar.Large.Inverse"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:max="100"
-        android:progress="0" />
-
-    <ProgressBar
-        android:id="@+id/progressBar4"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:max="100"
-        android:progress="0" />
+        android:max="10"
+        android:progress="6" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="5만큼 증가하기" />
+        android:text="값 가져오기" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1증가하기" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
 </LinearLayout>
