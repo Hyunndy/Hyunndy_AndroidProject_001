@@ -13,7 +13,6 @@ import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity() {
 
-
     // 1.
     // 코틀린의 배열은 arrayOf
     var data = arrayOf("리스트1", "리스트2", "리스트3")
@@ -22,11 +21,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 2.
-        //컨텍스트 : 어떠한 작업을 위해 필요한것들이 담아져있는 것.
-        // 안드로이드 컨텍스트 화면에 필요한것, OS 등
-        // 컨텍스트, 레이아웃,
-        var adater = ArrayAdapter(this, android.R.layout.simple_list_item_1 , data);
+        // 1.안드로이드가 알고있는 레이아웃을 할때는 레이아웃, 데이터만 전달해줘도된다.
+        // 2. 하지만 내가 만든 레이아웃(row1)을 사용할 때는 이 데이터를 넣을 곳(리스트항목)의 id를(textview2) 안드로이드 OS에게 알려줘야한다.
+        var adater = ArrayAdapter(this, R.layout.row1, R.id.textview2,data);
         listview.adapter = adater;
 
 
@@ -36,14 +33,14 @@ class MainActivity : AppCompatActivity() {
         listview.setOnItemClickListener(listner);
 
         listview.setOnItemClickListener { parent, view, position, id ->
-            textView.text = data[position]
+        //    textView.text = data[position]
         }
     }
 
     inner class ListListener : AdapterView.OnItemClickListener
     {
         override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            textView.text = data[position];
+        //    textView.text = data[position];
         }
     }
 }
