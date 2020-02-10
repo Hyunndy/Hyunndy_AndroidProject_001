@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 심플 어댑터 구조
+        // 심플 어댑터 구조2
         // 항목 하나를 구성할 개체들을 hashmap 객체에 담은 다음에 그걸 arraylist에 담고 어댑터에 세팅한다.
 
         // any = 어떠한 값이나 다 넣을 수 있다. 위에 넣을 애들이 정수형or문자열이므로 Any을 넣고, 만약 통일되었을 경우 그 자료형을 넣으면 된다.
