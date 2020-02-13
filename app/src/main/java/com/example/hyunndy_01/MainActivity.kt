@@ -1,12 +1,10 @@
 package com.example.hyunndy_01
 
-import android.app.DatePickerDialog
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.TimePickerDialog
+import android.app.*
 import android.content.Context
 import android.content.DialogInterface
 import android.content.DialogInterface.*
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
@@ -29,11 +27,6 @@ import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
-    var data1 = arrayOf("지존", "현지", "존예")
-    var data2 = arrayOf("슬림쿡", "다이어트", "도시락")
-    var data3 = intArrayOf(R.drawable.images, R.drawable.images, R.drawable.images)
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,104 +34,94 @@ class MainActivity : AppCompatActivity() {
         button2.setOnClickListener { view ->
 
             // 1. 노티피케이션 빌더 생성
-            var builder = getNotificationBuilder1("channel1", "첫 번째 채널")
-
-            // 2. 티커 생성
-            builder.setTicker("Ticker")
-            builder.setSmallIcon(android.R.drawable.ic_menu_search)
-
-            //3. 비트맵객체 = 안드로이드에서 이미지를 객체로 만든 것.
-            var bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
-            builder.setLargeIcon(bitmap)
-
-            builder.setNumber(100)
-
-            //사용자가 메세지를 클릭하면 자동 제거
+            var builder = getNotificationBuilder1("pending", "pendingIntent")
+            builder.setContentTitle("notification 1")
+            builder.setContentText("알림메세지 1 입니다")
+            builder.setSmallIcon(R.drawable.images)
             builder.setAutoCancel(true)
 
-            builder.setContentTitle("Content Title")
-            builder.setContentText("Content Text")
+            //2. Intent 생성
+            // Intent란 안드로이드 OS에게 저 이거 실행시켜주세요 시키는 것
+            var intent1 = Intent(this, TestActivity1::class.java)
 
-            // 4. 노티피케이션 생성
+
+            // Notification 눌렀을 때 나오는 Activity에서 데이터를 뽑아쓰기 위해 putExtra.
+            intent1.putExtra("data1", "문자열 데이터1")
+            intent1.putExtra("data2", 100)
+
+            var intent2 = Intent(this, TestActivity2::class.java)
+            intent2.putExtra("data2", "testactivity2 실행")
+            var pending2 = PendingIntent.getActivity(this, 100, intent2, PendingIntent.FLAG_UPDATE_CURRENT)
+            var builder2 = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_compass, "Action 1", pending2)
+            var action2 = builder2.build()
+            builder.addAction(action2)
+
+
+            // 플래그를 꼭 FLAG_UPDATE_CURRENT로 해줘야 데이터가 잘 전달된다.
+            var pending1 = PendingIntent.getActivity(this, 10, intent1, PendingIntent.FLAG_UPDATE_CURRENT)
+            builder.setContentIntent(pending1)
+
+
             var notification = builder.build()
-
-            // 5. 노티피케이션 메시지를 관리하는 노티피케이션 매니저 생성.
-            var mng = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-            // 알림창에서 각 알림을 구분하는 id.
-            mng.notify(10, notification)
-
-            // 6. 노티피케이션 채널
+            var manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.notify(10, notification)
 
         }
 
         button3.setOnClickListener { view ->
 
             // 1. 노티피케이션 빌더 생성
-            var builder = getNotificationBuilder1("channel3", "3 번째 채널")
-
-            // 2. 티커 생성
-            builder.setTicker("Ticker")
-            builder.setSmallIcon(android.R.drawable.ic_menu_search)
-
-            //3. 비트맵객체 = 안드로이드에서 이미지를 객체로 만든 것.
-            var bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
-            builder.setLargeIcon(bitmap)
-
-            builder.setNumber(100)
-
-            //사용자가 메세지를 클릭하면 자동 제거
+            var builder = getNotificationBuilder1("pending", "pendingIntent")
+            builder.setContentTitle("notification 2")
+            builder.setContentText("알림메세지 2 입니다")
+            builder.setSmallIcon(R.drawable.images)
             builder.setAutoCancel(true)
 
-            builder.setContentTitle("Content Title")
-            builder.setContentText("Content Text")
+            //2. Intent 생성
+            // Intent란 안드로이드 OS에게 저 이거 실행시켜주세요 시키는 것
+            var intent1 = Intent(this, TestActivity2::class.java)
 
-            // 4. 노티피케이션 생성
+            var pending1 = PendingIntent.getActivity(this, 0, intent1, 0)
+            builder.setContentIntent(pending1)
+
+
             var notification = builder.build()
-
-            // 5. 노티피케이션 메시지를 관리하는 노티피케이션 매니저 생성.
-            var mng = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-            // 알림창에서 각 알림을 구분하는 id.
-            mng.notify(30, notification)
-
-            // 6. 노티피케이션 채널
+            var manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.notify(20, notification)
 
         }
+
 
         button4.setOnClickListener { view ->
 
             // 1. 노티피케이션 빌더 생성
-            var builder = getNotificationBuilder1("channel2", "2번째 채널")
-
-            // 2. 티커 생성
-            builder.setTicker("Ticker")
-            builder.setSmallIcon(android.R.drawable.ic_menu_search)
-
-            //3. 비트맵객체 = 안드로이드에서 이미지를 객체로 만든 것.
-            var bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
-            builder.setLargeIcon(bitmap)
-
-            builder.setNumber(100)
-
-            //사용자가 메세지를 클릭하면 자동 제거
+            var builder = getNotificationBuilder1("pending", "pendingIntent")
+            builder.setContentTitle("notification 3")
+            builder.setContentText("알림메세지 3 입니다")
+            builder.setSmallIcon(R.drawable.images)
             builder.setAutoCancel(true)
 
-            builder.setContentTitle("Content Title")
-            builder.setContentText("Content Text")
+            //2. Intent 생성
+            // Intent란 안드로이드 OS에게 저 이거 실행시켜주세요 시키는 것
+            var intent1 = Intent(this, TestActivity1::class.java)
 
-            // 4. 노티피케이션 생성
+
+            // Notification 눌렀을 때 나오는 Activity에서 데이터를 뽑아쓰기 위해 putExtra.
+            intent1.putExtra("data1", "문자열 데이터3")
+            intent1.putExtra("data2", 300)
+
+            // 플래그를 꼭 FLAG_UPDATE_CURRENT로 해줘야 데이터가 잘 전달된다.
+            // requestCode
+            var pending1 = PendingIntent.getActivity(this, 20, intent1, PendingIntent.FLAG_UPDATE_CURRENT)
+            builder.setContentIntent(pending1)
+
+
             var notification = builder.build()
-
-            // 5. 노티피케이션 메시지를 관리하는 노티피케이션 매니저 생성.
-            var mng = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-            // 알림창에서 각 알림을 구분하는 id.
-            mng.notify(20, notification)
-
-            // 6. 노티피케이션 채널
+            var manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.notify(30, notification)
 
         }
+
     }
 
 
@@ -154,6 +137,7 @@ class MainActivity : AppCompatActivity() {
             var channel = NotificationChannel(id, name, NotificationManager.IMPORTANCE_HIGH)
             channel.enableLights(true)
             channel.lightColor = Color.RED
+            channel.enableVibration(true)
             manager.createNotificationChannel(channel)
 
             //채널의 아이디를 넣어서 채널 아이디가 세팅된게 넘어가면서 채널별로 그룹화해서 노피티케이션을 만들 수 있다.
