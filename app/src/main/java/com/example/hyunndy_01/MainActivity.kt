@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.DialogInterface.*
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
@@ -31,102 +32,71 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button2.setOnClickListener { view ->
+        button.setOnClickListener { view ->
 
-            // 1. 노티피케이션 빌더 생성
-            var builder = getNotificationBuilder1("pending", "pendingIntent")
-            builder.setContentTitle("notification 1")
-            builder.setContentText("알림메세지 1 입니다")
-            builder.setSmallIcon(R.drawable.images)
-            builder.setAutoCancel(true)
+            // 1. 빌더 세팅
+            var builder = getNotificationBuilder("style", "style Notification")
+            builder.setContentTitle("Big Picture")
+            builder.setContentText("빅픽쳐 노티피케이션")
+            builder.setSmallIcon(android.R.drawable.ic_media_next)
 
-            //2. Intent 생성
-            // Intent란 안드로이드 OS에게 저 이거 실행시켜주세요 시키는 것
-            var intent1 = Intent(this, TestActivity1::class.java)
+            // 2. 빅픽쳐 스타일 세팅
+            var big = NotificationCompat.BigPictureStyle(builder)
+            var bitmap = BitmapFactory.decodeResource(resources, R.drawable.images)
+            big.bigPicture(bitmap)
+            big.setBigContentTitle("빅컨텐트타이틀")
+            big.setSummaryText("서머리")
 
-
-            // Notification 눌렀을 때 나오는 Activity에서 데이터를 뽑아쓰기 위해 putExtra.
-            intent1.putExtra("data1", "문자열 데이터1")
-            intent1.putExtra("data2", 100)
-
-            var intent2 = Intent(this, TestActivity2::class.java)
-            intent2.putExtra("data2", "testactivity2 실행")
-            var pending2 = PendingIntent.getActivity(this, 100, intent2, PendingIntent.FLAG_UPDATE_CURRENT)
-            var builder2 = NotificationCompat.Action.Builder(android.R.drawable.ic_menu_compass, "Action 1", pending2)
-            var action2 = builder2.build()
-            builder.addAction(action2)
-
-
-            // 플래그를 꼭 FLAG_UPDATE_CURRENT로 해줘야 데이터가 잘 전달된다.
-            var pending1 = PendingIntent.getActivity(this, 10, intent1, PendingIntent.FLAG_UPDATE_CURRENT)
-            builder.setContentIntent(pending1)
-
-
+            // 3. 노티피케이션 객체 만들어서 띄우기
             var notification = builder.build()
             var manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.notify(10, notification)
+        }
 
+        button2.setOnClickListener { view ->
+            // 1. 빌더 세팅
+            var builder = getNotificationBuilder("style", "style Notification")
+            builder.setContentTitle("Big Picture")
+            builder.setContentText("빅픽쳐 노티피케이션")
+            builder.setSmallIcon(android.R.drawable.ic_media_next)
+
+            // 2. 빅텍스트 스타일 세팅
+            var big = NotificationCompat.BigTextStyle(builder)
+            big.setSummaryText("서머리 텍스트")
+            big.setBigContentTitle("빅 컨텐트 타이틀")
+            big.bigText("동해물과 백두산이 마르고 닳도록 동해물과 백두산이 마르고 닳도록 동해물과 백두산이 마르고 닳도록동해물과 백두산이 마르고 닳도록 동해물과 백두산이 마르고 닳도록 ")
+
+            // 3. 노티피케이션 객체 만들어서 띄우기
+            var notification = builder.build()
+            var manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.notify(10, notification)
         }
 
         button3.setOnClickListener { view ->
+            // 1. 빌더 세팅
+            var builder = getNotificationBuilder("style", "style Notification")
+            builder.setContentTitle("Big Picture")
+            builder.setContentText("빅픽쳐 노티피케이션")
+            builder.setSmallIcon(android.R.drawable.ic_media_next)
 
-            // 1. 노티피케이션 빌더 생성
-            var builder = getNotificationBuilder1("pending", "pendingIntent")
-            builder.setContentTitle("notification 2")
-            builder.setContentText("알림메세지 2 입니다")
-            builder.setSmallIcon(R.drawable.images)
-            builder.setAutoCancel(true)
-
-            //2. Intent 생성
-            // Intent란 안드로이드 OS에게 저 이거 실행시켜주세요 시키는 것
-            var intent1 = Intent(this, TestActivity2::class.java)
-
-            var pending1 = PendingIntent.getActivity(this, 0, intent1, 0)
-            builder.setContentIntent(pending1)
+            // 2. 인박스  스타일 세팅
+            var inbox = NotificationCompat.InboxStyle(builder)
+            inbox.setSummaryText("인박스 서머리")
+            inbox.addLine("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            inbox.addLine("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+            inbox.addLine("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
+            inbox.addLine("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd")
 
 
+            // 3. 노티피케이션 객체 만들어서 띄우기
             var notification = builder.build()
             var manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.notify(20, notification)
-
-        }
-
-
-        button4.setOnClickListener { view ->
-
-            // 1. 노티피케이션 빌더 생성
-            var builder = getNotificationBuilder1("pending", "pendingIntent")
-            builder.setContentTitle("notification 3")
-            builder.setContentText("알림메세지 3 입니다")
-            builder.setSmallIcon(R.drawable.images)
-            builder.setAutoCancel(true)
-
-            //2. Intent 생성
-            // Intent란 안드로이드 OS에게 저 이거 실행시켜주세요 시키는 것
-            var intent1 = Intent(this, TestActivity1::class.java)
-
-
-            // Notification 눌렀을 때 나오는 Activity에서 데이터를 뽑아쓰기 위해 putExtra.
-            intent1.putExtra("data1", "문자열 데이터3")
-            intent1.putExtra("data2", 300)
-
-            // 플래그를 꼭 FLAG_UPDATE_CURRENT로 해줘야 데이터가 잘 전달된다.
-            // requestCode
-            var pending1 = PendingIntent.getActivity(this, 20, intent1, PendingIntent.FLAG_UPDATE_CURRENT)
-            builder.setContentIntent(pending1)
-
-
-            var notification = builder.build()
-            var manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.notify(30, notification)
-
+            manager.notify(10, notification)
         }
 
     }
 
-
-
-    fun getNotificationBuilder1(id:String, name:String) : NotificationCompat.Builder{
+    fun getNotificationBuilder(id:String, name:String) : NotificationCompat.Builder{
         var builder:NotificationCompat.Builder? = null
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -149,7 +119,6 @@ class MainActivity : AppCompatActivity() {
             // 8.0 이하에서는 노티피케이션 채널을 만들어줄 필요가 없다.
             builder = NotificationCompat.Builder(this)
         }
-
 
         return builder
     }
