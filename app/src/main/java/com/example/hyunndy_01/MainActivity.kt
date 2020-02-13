@@ -21,50 +21,60 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-        // 버튼을 클릭하면 텍스트뷰에 팝업 메뉴를 띄우는 형식.
-        button.setOnClickListener { view ->
-            var pop = PopupMenu(this, textView)
-
-            //팝업 메뉴 생성
-            menuInflater.inflate(R.menu.popup_menu, pop.menu)
-
-            // 팝업 메뉴에 리스너 설정(중첩 클래스)
-            var listner = PopupListner()
-            pop.setOnMenuItemClickListener(listner)
-
-            // 팝업 메뉴에 리스너 설정(람다식)
-            // 람다식에서의 return 값은 밑에 false를 넣어주면 알아서 그 값만 들어간다.
-            pop.setOnMenuItemClickListener { item ->
-                when(item?.itemId)
-                {
-                    R.id.item1 ->
-                        textView.text = "지존"
-                    R.id.item2 ->
-                        textView.text = "존예"
-                    R.id.item3 ->
-                        textView.text = "현지"
-                }
-                false
-            }
-            //팝업 메뉴 SHOW
-            pop.show()
-        }
     }
 
-    inner class PopupListner:PopupMenu.OnMenuItemClickListener{
-        override fun onMenuItemClick(item: MenuItem?): Boolean {
-            when(item?.itemId)
-            {
-                R.id.item1 ->
-                    textView.text = "지존"
-                R.id.item2 ->
-                    textView.text = "존예"
-                R.id.item3 ->
-                    textView.text = "현지"
+    // 1. 메뉴 생성
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+
+        // 3. searchView의 기본 text 바꾸기
+        // 서치로 사용되는 메뉴의 항목(item) 가져오기.
+        var search_item:MenuItem? = menu?.findItem(R.id.tiem5)
+        // 서치뷰 가져오기.
+        var search_view:SearchView = search_item?.actionView as SearchView
+        // 쿼리 힌트를 내가 원하는걸 하기.
+        search_view.queryHint = "검색어를 입력해주세요"
+
+
+
+        // 4. 검색완료 버튼 눌렀을 떄의 처리
+        search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener
+        {
+            // 검색창에 들어오는 텍스트
+            override fun onQueryTextChange(newText: String?): Boolean {
+                textView.text = newText
+
+                // 키보드가 내려가는지 안내려가는지 결정
+                return false
             }
-            return true
+
+            // 검색창에 텍스트 치고 검색완료 버튼 눌러서 Submit했을 때의 반응
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                textView2.text = query
+
+                // 키보드가 내려가는지 안내려가는지 결정
+                // false면 검색완료 누르면 내려감
+                return false
+            }
+        })
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    // 2. 옵션 메뉴 설정
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId)
+        {
+            R.id.item1 ->
+                textView.text = "지존"
+            R.id.tiem2 ->
+                textView.text = "존예"
+            R.id.tiem3 ->
+                textView.text = "현지"
+            R.id.tiem4 ->
+                textView.text = "존못"
         }
+
+        return super.onOptionsItemSelected(item)
     }
 }
