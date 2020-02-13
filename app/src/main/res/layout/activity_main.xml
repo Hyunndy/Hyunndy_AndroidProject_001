@@ -14,9 +14,10 @@
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-    <ListView
-        android:id="@+id/listview"
+    <Button
+        android:id="@+id/button"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:text="팝업메뉴" />
 
 </LinearLayout>
