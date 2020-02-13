@@ -1,10 +1,15 @@
 package com.example.hyunndy_01
 
 import android.app.DatePickerDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.DialogInterface.*
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.CalendarContract
@@ -14,6 +19,7 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.NotificationCompat
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.activity_main.*
@@ -32,63 +38,135 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button8.setOnClickListener { view ->
+        button2.setOnClickListener { view ->
 
-            var builder = AlertDialog.Builder(this)
-            builder.setTitle("리스트 다이얼로그")
-            builder.setNegativeButton("취소", null)
+            // 1. 노티피케이션 빌더 생성
+            var builder = getNotificationBuilder1("channel1", "첫 번째 채널")
 
-            //리스너 세팅
-            //리스트뷰 다이얼로그의 몇번째 항목을 선택했는지가 which에 들어옴
-            //버튼들에 세팅하면 이게 몇번째 버튼인지/setItems에 세팅하면 이게 몇번째 항목인지가 들어옴
-            var listner =  object:DialogInterface.OnClickListener{
-            override fun onClick(dialog: DialogInterface?, which: Int) {
-                textView.text = "기본리스트 다이얼로그 :  ${data1[which]}"
-            }
+            // 2. 티커 생성
+            builder.setTicker("Ticker")
+            builder.setSmallIcon(android.R.drawable.ic_menu_search)
+
+            //3. 비트맵객체 = 안드로이드에서 이미지를 객체로 만든 것.
+            var bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
+            builder.setLargeIcon(bitmap)
+
+            builder.setNumber(100)
+
+            //사용자가 메세지를 클릭하면 자동 제거
+            builder.setAutoCancel(true)
+
+            builder.setContentTitle("Content Title")
+            builder.setContentText("Content Text")
+
+            // 4. 노티피케이션 생성
+            var notification = builder.build()
+
+            // 5. 노티피케이션 메시지를 관리하는 노티피케이션 매니저 생성.
+            var mng = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            // 알림창에서 각 알림을 구분하는 id.
+            mng.notify(10, notification)
+
+            // 6. 노티피케이션 채널
+
         }
-            builder.setItems(data1, listner)
-            builder.show()
+
+        button3.setOnClickListener { view ->
+
+            // 1. 노티피케이션 빌더 생성
+            var builder = getNotificationBuilder1("channel3", "3 번째 채널")
+
+            // 2. 티커 생성
+            builder.setTicker("Ticker")
+            builder.setSmallIcon(android.R.drawable.ic_menu_search)
+
+            //3. 비트맵객체 = 안드로이드에서 이미지를 객체로 만든 것.
+            var bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
+            builder.setLargeIcon(bitmap)
+
+            builder.setNumber(100)
+
+            //사용자가 메세지를 클릭하면 자동 제거
+            builder.setAutoCancel(true)
+
+            builder.setContentTitle("Content Title")
+            builder.setContentText("Content Text")
+
+            // 4. 노티피케이션 생성
+            var notification = builder.build()
+
+            // 5. 노티피케이션 메시지를 관리하는 노티피케이션 매니저 생성.
+            var mng = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            // 알림창에서 각 알림을 구분하는 id.
+            mng.notify(30, notification)
+
+            // 6. 노티피케이션 채널
 
         }
 
-        button.setOnClickListener { view ->
-            var builder = AlertDialog.Builder(this)
-            builder.setTitle("커스텀 리스트 다이얼로그")
+        button4.setOnClickListener { view ->
 
-            //심플어댑터 쓰려면 항목 한 칸을 구성하기 위한 항목들을 해쉬맵에 담고, 그 해쉬맵을 리스트에 담고 그 리스트를 심플어댑터에 넣어줘야 한다.
-            var list = ArrayList<HashMap<String, Any>>()
+            // 1. 노티피케이션 빌더 생성
+            var builder = getNotificationBuilder1("channel2", "2번째 채널")
 
-            var idx = 0
-            while(idx < data2.size)
-            {
-                var map = HashMap<String, Any>()
-                map.put("data2", data2[idx])
-                map.put("data3", data3[idx])
+            // 2. 티커 생성
+            builder.setTicker("Ticker")
+            builder.setSmallIcon(android.R.drawable.ic_menu_search)
 
-                list.add(map)
-                idx++
+            //3. 비트맵객체 = 안드로이드에서 이미지를 객체로 만든 것.
+            var bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
+            builder.setLargeIcon(bitmap)
 
-            }
+            builder.setNumber(100)
 
-            var keys = arrayOf("data2", "data3")
-            var ids = intArrayOf(R.id.textview2, R.id.imageview)
+            //사용자가 메세지를 클릭하면 자동 제거
+            builder.setAutoCancel(true)
 
-            var adapter = SimpleAdapter(this, list, R.layout.custom_dialogue, keys, ids)
+            builder.setContentTitle("Content Title")
+            builder.setContentText("Content Text")
 
+            // 4. 노티피케이션 생성
+            var notification = builder.build()
 
-            var listner = object:DialogInterface.OnClickListener{
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-                    textView.text = "커스텀 다이얼로그 : ${data2[which]}"
-                }
-            }
+            // 5. 노티피케이션 메시지를 관리하는 노티피케이션 매니저 생성.
+            var mng = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-            builder.setAdapter(adapter, listner)
+            // 알림창에서 각 알림을 구분하는 id.
+            mng.notify(20, notification)
 
+            // 6. 노티피케이션 채널
 
-
-
-            builder.setNegativeButton("취소", listner)
-            builder.show()
         }
+    }
+
+
+
+    fun getNotificationBuilder1(id:String, name:String) : NotificationCompat.Builder{
+        var builder:NotificationCompat.Builder? = null
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            // 매니저 생성
+            var manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            // 채널 생성
+            var channel = NotificationChannel(id, name, NotificationManager.IMPORTANCE_HIGH)
+            channel.enableLights(true)
+            channel.lightColor = Color.RED
+            manager.createNotificationChannel(channel)
+
+            //채널의 아이디를 넣어서 채널 아이디가 세팅된게 넘어가면서 채널별로 그룹화해서 노피티케이션을 만들 수 있다.
+            builder = NotificationCompat.Builder(this, id)
+
+        }
+        else
+        {
+            // 8.0 이하에서는 노티피케이션 채널을 만들어줄 필요가 없다.
+            builder = NotificationCompat.Builder(this)
+        }
+
+
+        return builder
     }
 }
