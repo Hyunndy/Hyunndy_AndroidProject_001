@@ -7,21 +7,10 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <Button
-        android:id="@+id/button"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 </LinearLayout>

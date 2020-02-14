@@ -1,10 +1,12 @@
 package com.example.hyunndy_01
 
+import android.Manifest
 import android.app.*
 import android.content.Context
 import android.content.DialogInterface
 import android.content.DialogInterface.*
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -28,98 +30,73 @@ import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
+    // 1. 등록한 권한들 중에서 확인이 필요한 권한들만 목록으로 코드로 짜주면 된다.
+    var permission_list = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.READ_CONTACTS,
+        Manifest.permission.RECEIVE_SMS,
+        Manifest.permission.SEND_SMS
+    )
+
+    // 2. 권한 확인(안드로이드 마쉬멜로우 이상 버전에서부터만 검사한다)
+    fun checkPermission(){
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+        {
+            return
+        }
+        else
+        {
+            // Kotlin에서의 for문은 배열을 도는 용도.
+            for(permission : String in permission_list)
+            {
+                // 권한 허용했는지 묻는 용도(INT)
+                var chk = checkCallingOrSelfPermission(permission)
+
+                // 만일 거절했었다면,
+                if(chk == PackageManager.PERMISSION_DENIED)
+                {
+                    // 권한 승인 요청
+                    requestPermissions(permission_list, 0)
+
+                    break
+                }
+            }
+        }
+    }
+
+    // 3. 권한 승인 요청 후 다이얼로그 없어졌을 때 어떤 권한들이 승인되었는지 알아보는 함수
+    // permissions : 체크한 권한들의 목록 배열
+    // grantResults : 해당 배열이 승인되었는지 안되었는지 여부
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        var idx = 0;
+
+        // indices를붙으면 배열의 인덱스 번호,
+        // 안붙이면 배열의 값.
+        for(idx in grantResults.indices)
+        {
+            if(grantResults[idx] == PackageManager.PERMISSION_GRANTED)
+            {
+                textView.append("${permission_list[idx]} : 허용함\n")
+            }
+            else
+            {
+                textView.append("${permission_list[idx]} : 거부함\n")
+            }
+        }
+
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button.setOnClickListener { view ->
-
-            // 1. 빌더 세팅
-            var builder = getNotificationBuilder("style", "style Notification")
-            builder.setContentTitle("Big Picture")
-            builder.setContentText("빅픽쳐 노티피케이션")
-            builder.setSmallIcon(android.R.drawable.ic_media_next)
-
-            // 2. 빅픽쳐 스타일 세팅
-            var big = NotificationCompat.BigPictureStyle(builder)
-            var bitmap = BitmapFactory.decodeResource(resources, R.drawable.images)
-            big.bigPicture(bitmap)
-            big.setBigContentTitle("빅컨텐트타이틀")
-            big.setSummaryText("서머리")
-
-            // 3. 노티피케이션 객체 만들어서 띄우기
-            var notification = builder.build()
-            var manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.notify(10, notification)
-        }
-
-        button2.setOnClickListener { view ->
-            // 1. 빌더 세팅
-            var builder = getNotificationBuilder("style", "style Notification")
-            builder.setContentTitle("Big Picture")
-            builder.setContentText("빅픽쳐 노티피케이션")
-            builder.setSmallIcon(android.R.drawable.ic_media_next)
-
-            // 2. 빅텍스트 스타일 세팅
-            var big = NotificationCompat.BigTextStyle(builder)
-            big.setSummaryText("서머리 텍스트")
-            big.setBigContentTitle("빅 컨텐트 타이틀")
-            big.bigText("동해물과 백두산이 마르고 닳도록 동해물과 백두산이 마르고 닳도록 동해물과 백두산이 마르고 닳도록동해물과 백두산이 마르고 닳도록 동해물과 백두산이 마르고 닳도록 ")
-
-            // 3. 노티피케이션 객체 만들어서 띄우기
-            var notification = builder.build()
-            var manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.notify(10, notification)
-        }
-
-        button3.setOnClickListener { view ->
-            // 1. 빌더 세팅
-            var builder = getNotificationBuilder("style", "style Notification")
-            builder.setContentTitle("Big Picture")
-            builder.setContentText("빅픽쳐 노티피케이션")
-            builder.setSmallIcon(android.R.drawable.ic_media_next)
-
-            // 2. 인박스  스타일 세팅
-            var inbox = NotificationCompat.InboxStyle(builder)
-            inbox.setSummaryText("인박스 서머리")
-            inbox.addLine("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-            inbox.addLine("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
-            inbox.addLine("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
-            inbox.addLine("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd")
-
-
-            // 3. 노티피케이션 객체 만들어서 띄우기
-            var notification = builder.build()
-            var manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.notify(10, notification)
-        }
-
-    }
-
-    fun getNotificationBuilder(id:String, name:String) : NotificationCompat.Builder{
-        var builder:NotificationCompat.Builder? = null
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            // 매니저 생성
-            var manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            // 채널 생성
-            var channel = NotificationChannel(id, name, NotificationManager.IMPORTANCE_HIGH)
-            channel.enableLights(true)
-            channel.lightColor = Color.RED
-            channel.enableVibration(true)
-            manager.createNotificationChannel(channel)
-
-            //채널의 아이디를 넣어서 채널 아이디가 세팅된게 넘어가면서 채널별로 그룹화해서 노피티케이션을 만들 수 있다.
-            builder = NotificationCompat.Builder(this, id)
-
-        }
-        else
-        {
-            // 8.0 이하에서는 노티피케이션 채널을 만들어줄 필요가 없다.
-            builder = NotificationCompat.Builder(this)
-        }
-
-        return builder
+        checkPermission()
     }
 }
