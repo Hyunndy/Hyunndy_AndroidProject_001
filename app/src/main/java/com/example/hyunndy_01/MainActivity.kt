@@ -29,45 +29,19 @@ import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
-    var isRunning = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // 1. 버튼을 눌러서 두번째 액티비티를 실행시킨다.
+        button2.setOnClickListener { view ->
 
-        button.setOnClickListener { view ->
-            var time = System.currentTimeMillis()
-            textView.text = "버튼 클릭 : ${time}"
+            // 2. 인텐트 객체 생성
+            var intent = Intent(this, SecondActivity::class.java)
+
+            // 3. 이 Intent를 실행시켜줘! 안드로이드os야!
+            startActivity(intent)
         }
-
-        isRunning = true
-        var thread = ThreadClass()
-        thread.start()
-
-    }
-
-    inner class ThreadClass:Thread()
-    {
-        override fun run() {
-            while (isRunning) {
-                SystemClock.sleep(100)
-                var time = System.currentTimeMillis()
-                Log.d("test1", "쓰레드 : ${time}")
-
-                // 1. 일반 Thread이기 때문에 전OS에서 화면 처리가 가능하지 않다. 이 경우에! runOnUiThread를 넣는다.
-            runOnUiThread {
-                textView2.text = " ${time}"
-            }
-
-            }
-        }
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        isRunning = false
     }
 }
