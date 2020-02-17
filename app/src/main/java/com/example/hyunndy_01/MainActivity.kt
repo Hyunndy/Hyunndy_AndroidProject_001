@@ -37,38 +37,30 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 1. 버튼을 눌러서 두번째 액티비티를 실행시킨다.
+
         button2.setOnClickListener { view ->
 
-            // 2. 인텐트 객체 생성
+            // 8. Parcelable 인터페이스를 구현한 클래스 객체를 만든다.
+            var t1 = TestClass()
+            t1.data10 = 100
+            t1.data20 = "문자열2"
+
             var intent = Intent(this, SecondActivity::class.java)
 
-
-            // 3. Intent에 데이터 세팅.
-            intent.putExtra("data1", 100)
-            intent.putExtra("data2", 11.11)
-            intent.putExtra("data3", true)
-            intent.putExtra("data4", "문자열")
-
+            // 9. intent에 TestClass 객체를 넣는다. (정확히는 TestClass가 가진 값들)
+            intent.putExtra("test", t1);
             startActivityForResult(intent, SECOND_ACTIVITY)
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
 
-        // 7. 세컨드 액티비티에서 넘어온 intent에서 데이터를 뽑는다.
+    // 12. second 액티비티에서 보낸 데이터 받기.
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(resultCode == Activity.RESULT_OK)
         {
-            var value1 = data?.getIntExtra("value1", 0)
-            var value2 = data?.getDoubleExtra("value2", 0.0)
-            var value3 = data?.getBooleanExtra("value3", false)
-            var value4 = data?.getStringExtra("value4")
-
-            textView.text = "data1 = ${value1}\n"
-            textView.append("data2 = ${value2}\n")
-            textView.append("data3 = ${value3}\n")
-            textView.append("data4 = ${value4}\n")
+            var t2 = data?.getParcelableExtra<TestClass>("test2")
+            textView.text = "t2.data1 : ${t2?.data10}\n"
+            textView.append("t2.data2 : ${t2?.data20}")
         }
     }
 }
