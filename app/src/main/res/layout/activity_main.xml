@@ -19,4 +19,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="세컨액티비티" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="서드액티비티" />
 </LinearLayout>
