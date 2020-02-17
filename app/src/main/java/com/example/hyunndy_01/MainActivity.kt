@@ -29,82 +29,84 @@ import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
-    // 3. Activity가 종료되면 Thread도 종료될 수 있게 bool 변수 선언.
-    var IsRunning:Boolean = false
-
-    // 4. 개발자가 만든 쓰레드에서 화면처리 작업을 위해 Handler 생성
-    var handler : DisplayHandler? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 1. 버튼을 누를 때 마다 현재 시간 textview에 출력
-        button.setOnClickListener {  view ->
+
+        button.setOnClickListener { view ->
             var time = System.currentTimeMillis()
             textView.text = "버튼 클릭 : ${time}"
         }
 
+        var sync = AsyncTaskClass()
 
-        handler = DisplayHandler()
-
-        // 2. Thread start
-        IsRunning = true
-        var thread = ThreadClass()
-        thread.start()
+        // 1. AsyncTask 가동. execute()의 매개변수는 그대로 doInBackground()의 매개변수로 넘어간다.
+        sync.execute(10, 20)
     }
 
-    // 2. Handler 사용을 위해 Thread 생성
-    inner class ThreadClass : Thread()
-    {
-        override fun run() {
 
-            while(IsRunning) {
-                SystemClock.sleep(100)
-                var time = System.currentTimeMillis()
+    // 제네릭 타입을 3개 지정해주어야 한다.
+    // 제네릭1) excute() 매개변수 타입
+    // 제네릭2) publishProgress() 매개변수 타입
+    // 제네릭3) doInBackground()의 반환 타입 이자 onPostExcute의 매개변수 타입
+    inner class AsyncTaskClass : AsyncTask<Int, Long, String>() {
 
-                Log.d("test1", "쓰레드 : ${time}")
-                //textView2.text = "Handler : ${time}"
+        // doInBackground 메서드가 호출되기 전에 딱 한 번 호출되는 메서드.  Main Thread가 처리한다.
+        override fun onPreExecute() {
+            super.onPreExecute()
 
-                // 5. 개발자가 만든 Thread에서 Handler를 호출하게되면 MainThread가 한가할 때 작업 요청이 가능하다.
-
-                // 5-1) 이 예제의 경우 Handler안에서 Time을 처리할 때는 걍 EmptyMessage만 보내도 된다.
-                handler?.sendEmptyMessage(0)
-
-                // 5-2) Message 객체에 여러개를 실어 보낼 수 있다.
-
-                // Message.what = handler로 넘기는 작업의 Index개념.
-                // Message.obj = 객체가 넘어가는것이기 때문에 Any 객체나 될 수 있다.
-                var msg = Message()
-                msg.what = 0
-                msg.obj = time
-                handler?.sendMessage(msg)
-            }
+            textView2.text = " AsyncTask 가동 ";
         }
-    }
 
-    // 3. Activity가 종료되면 Thread도 종료될 수 있게 bool 변수 선언.
-    override fun onDestroy() {
-        super.onDestroy()
+        //  일반 Thread에서 처리한다.  네트워크 작업 or 5초 이상 걸리는 작업을 이 메서드에서 처리한다.
+        // 1. execute()의 매개변수는 그대로 doInBackground()의 매개변수로 넘어간다.
+        override fun doInBackground(vararg params: Int?): String {
 
-        IsRunning = false
-    }
+            // 2.
+            // varag params에는 ?가 붙어서 NULL을 허용하지만, 정수 값을 뽑아낼거기 때문에 NULL을 허용하면 안되므로
+            // NULL을 허용하는 변수를 NULL을 허용하지 않는 변수에 넣고싶을 때는 느낌표2개(!!)을 붙여주면 된다.
+            var a1 = params[0]!!
+            var a2 = params[1]!!
 
-    // 4. 개발자가 만든 쓰레드에서 화면처리 작업을 위해 Handler 생성
-    inner class DisplayHandler : Handler()
-    {
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
+            for (idx in 0..9) {
+                SystemClock.sleep(100)
 
-            if(msg.what == 0) {
+                a1++
+                a2++
 
-                // 5-1.
-                //var time = System.currentTimeMillis()
-                //textView2.text = " Handler : ${time}"
+                // 3.
+                // 이렇게하면 되긴하는데 WrongThread 경고가 뜬다. 안드로이드는 일반 쓰레드에서 화면 처리를 하면 경고를 보낸다. 따라서 좋은 코드가 아님.
+                //textView2.text = " ${idx} : ${a1}, ${a2}"
 
-                // 5-2.
-                textView2.text = "Handler : ${msg?.obj}"
+
+                // 4.
+                // doInBackground() 에서 화면처리를 하려면 onProgressUpdate() 함수가 필요하고, 그 함수는 publishProgress()로 호출할 수 있다.
+                // publishProgress(varags 변수) 매개변수가 onProgressUpdate(varags 변수)로 전달된다. 값 여러개 전달하면 배열로 만들어져 전달된다.
+                // 메인쓰레드가 한가할 때 publishProgress()를 호출해준다.
+                var time = System.currentTimeMillis()
+                publishProgress(time)
+
             }
+
+            return "지존현지"
+        }
+
+        // 4.
+        // doInBackground 메서드에서 publishProgress 메서드를 호출하면 Main Thread가 처리하는 메서드. doInBackground 메서드 내에서 화면 처리가 필요할 때 사용한다.
+        override fun onProgressUpdate(vararg values: Long?) {
+            super.onProgressUpdate(*values)
+
+            textView2.text = "Async : ${values[0]}"
+        }
+
+        // 5.
+        // doInBackground()의 반환 타입이 매개변수로 넘어온다.
+        // doInBackground 메서드 수행 완료 후 호출. MainThread가 처리한다.
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+
+            textView2.text = result
         }
     }
 }
