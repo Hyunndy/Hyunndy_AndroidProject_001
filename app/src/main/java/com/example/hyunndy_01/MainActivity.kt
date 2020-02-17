@@ -30,7 +30,6 @@ import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
-    // 6. 상수 정의
     private val SECOND_ACTIVITY = 1
     private val THIRD_ACTIVITY = 2
 
@@ -44,52 +43,32 @@ class MainActivity : AppCompatActivity() {
             // 2. 인텐트 객체 생성
             var intent = Intent(this, SecondActivity::class.java)
 
-            // 3. 이 Intent를 실행시켜줘! 안드로이드os야!
+
+            // 3. Intent에 데이터 세팅.
+            intent.putExtra("data1", 100)
+            intent.putExtra("data2", 11.11)
+            intent.putExtra("data3", true)
+            intent.putExtra("data4", "문자열")
+
             startActivityForResult(intent, SECOND_ACTIVITY)
-        }
-
-        button3.setOnClickListener {  view ->
-
-            // 5. 서드액티비티로 이동하는 인텐트
-            var intent = Intent(this, ThirdActivity::class.java)
-            startActivityForResult(intent, THIRD_ACTIVITY)
         }
     }
 
-
-    // 4.
-    // startActivityForResult()로 SecondActivity를 실행시켰기 때문에 거기서 finish()하고 돌아왔을 때 자동으로 이 함수가 호출.
-
-    // requestCode : Main Activity에서 갔다가 돌아온 Activity가 여러개 일 수 있기 때문에 그걸 구분해주기 위해 사용하는 코드. 어떤 액티비티에서 finish하고 돌아왔는지 구분해주기 위한 코드.
-    // resultCode : 다른 activity로 들어가서 작업을 했고, 그 작업의 결과가 어떤지 알려주는 코드. 작업하는 액티비티에서 setResult()로 설정 가능.
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        when(requestCode)
+        // 7. 세컨드 액티비티에서 넘어온 intent에서 데이터를 뽑는다.
+        if(resultCode == Activity.RESULT_OK)
         {
-            SECOND_ACTIVITY ->
-            {
-                textView.text = "세컨액티비티에서 돌아옴"
+            var value1 = data?.getIntExtra("value1", 0)
+            var value2 = data?.getDoubleExtra("value2", 0.0)
+            var value3 = data?.getBooleanExtra("value3", false)
+            var value4 = data?.getStringExtra("value4")
 
-                // 7. 전달받은 resultCode로 분기 가능.
-                when(resultCode)
-                {
-                   Activity.RESULT_OK -> {
-                       textView.text = "asdsad"
-                    }
-                    Activity.RESULT_CANCELED -> {
-                        textView.text = "asdasd"
-                    }
-                    Activity.RESULT_FIRST_USER -> {
-                        textView.text = "asda"
-                    }
-                }
-            }
-
-            THIRD_ACTIVITY -> {
-                textView.text = "서드액티비티에서 돌아옴"
-            }
+            textView.text = "data1 = ${value1}\n"
+            textView.append("data2 = ${value2}\n")
+            textView.append("data3 = ${value3}\n")
+            textView.append("data4 = ${value4}\n")
         }
-
     }
 }
