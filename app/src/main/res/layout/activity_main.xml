@@ -18,23 +18,23 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="지도띄우기" />
+        android:text="서비스스타트" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="홈페이지띄우기" />
+        android:text="서비스스탑" />
 
     <Button
         android:id="@+id/button3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="다이얼띄우기" />
+        android:text="인텐트서비스스타트" />
 
     <Button
         android:id="@+id/button4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="전화걸기" />
+        android:text="포그라운드 서비스 " />
 </LinearLayout>

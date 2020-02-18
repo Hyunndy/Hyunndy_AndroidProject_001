@@ -20,6 +20,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.viewpager.widget.PagerAdapter
@@ -32,35 +33,40 @@ import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
-    // 문자 메세지 받을 때 등록을 위해 Permission List
-    var permission_list = arrayOf(
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.RECEIVE_SMS
-    )
+    var survice_intent:Intent? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        checkPermission()
-    }
-
-    fun checkPermission()
-    {
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-        {
-            return
+        // 1. 서비스 가동
+        button.setOnClickListener {  view ->
+            survice_intent = Intent(this, ServiceClass1::class.java)
+            startService(survice_intent)
         }
 
-        for(permission : String in permission_list)
-        {
-            var chk = checkCallingOrSelfPermission(permission)
-            if(chk == PackageManager.PERMISSION_DENIED)
-            {
-                requestPermissions(permission_list, 0)
-                break
+        // 2. 서비스 종료
+        button2.setOnClickListener { view ->
+            stopService(survice_intent)
+        }
 
+        // 3. 인텐트 서비스 가동
+        button3.setOnClickListener { view ->
+            survice_intent = Intent(this, ServiceClass2::class.java)
+            startService(survice_intent)
+            finish()
+        }
+
+        // 4. 포그라운드 서비스 가동
+        button4.setOnClickListener { view ->
+            survice_intent = Intent(this, ServiceClass3::class.java)
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            {
+                startForegroundService(survice_intent)
+            }
+            else {
+                startService(survice_intent)
             }
         }
     }

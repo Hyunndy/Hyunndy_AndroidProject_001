@@ -9,21 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".ServiceClass3"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
+            android:name=".ServiceClass2"
+            android:exported="false" />
+        <service
+            android:name=".ServiceClass1"
+            android:enabled="true"
+            android:exported="true" />
+
         <receiver
             android:name=".TestReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true" />
 
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
-            </intent-filter>
-
-        </receiver>
-
-        <activity android:name=".SecondActivity"></activity>
+        <activity android:name=".SecondActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,9 +35,5 @@
             </intent-filter>
         </activity>
     </application>
-
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
 
 </manifest>
