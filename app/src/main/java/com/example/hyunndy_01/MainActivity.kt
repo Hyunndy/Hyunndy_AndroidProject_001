@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.net.Uri
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.provider.CalendarContract
@@ -29,38 +30,75 @@ import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
-    val SECOND_ACTIVITY = 1
 
+    var permission_list = arrayOf(
+            Manifest.permission.CALL_PHONE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
+        // 1. 지도 띄우기
         button.setOnClickListener { view ->
 
-            // 1. 안드로이드OS는 자신이 가지고있는 App의 모든 구성요소를 저장하고있기 때문에 가져올 수 있다.
-            // 다른 어플에서 카카오톡으로 로그인하기 이런 기능들이 모두 이것을 이용해서 하는것이다.
-            var intent = Intent("android.intent.action.SECOND")
+            // 1.지도를 띄우기 위해 위도 세팅
+            var uri = Uri.parse("geo:37.243243,13861601")
 
-            // 2. 다른 App의 Activity를 실행시킬 때 Data전달하기.
-            intent.putExtra("data1", 100)
-            intent.putExtra("data2", 11.11)
+            // 2. 액션뷰
+            //  뭔가를 보여주는 목적으로 쓰임.
+            //  뒤에 들어가는것이 무엇인가(Ex. 위도=지도, url=홈페이지 등)에 따라 뜨는게 다름.
+            var intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
+        }
 
-            startActivityForResult(intent, SECOND_ACTIVITY)
+
+        // 2. 홈페이지 띄우기
+        button2.setOnClickListener { view ->
+
+            var uri = Uri.parse("http://www.naver.com")
+
+            var intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
+        }
 
 
+        // 3. 번호 다이얼 띄우기
+        button3.setOnClickListener { view ->
+
+            var uri = Uri.parse("tel:01020562708")
+
+            var intent = Intent(Intent.ACTION_DIAL, uri)
+            startActivity(intent)
+        }
+
+        // 4. 자동으로 전화걸기
+        // 전화거는건 돈이 나가므로 권한요청이 필요하다.
+        checkPermission()
+
+        button4.setOnClickListener { view ->
+
+            var uri = Uri.parse("tel:01020562708")
+
+            var intent = Intent(Intent.ACTION_CALL, uri)
+            startActivity(intent)
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(resultCode == Activity.RESULT_OK)
+    // 4. 전화걸기를 위한 권한 요청
+    fun checkPermission()
+    {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
         {
-            var data1 = data?.getIntExtra("value1", 0)
-            var data2 = data?.getDoubleExtra("value2", 0.0)
-
-            textView.text = "data1 = ${data1}\n"
-            textView.append("data2 = ${data2}")
+            return
+        }
+        for (permission : String in permission_list)
+        {
+            var chk = checkCallingOrSelfPermission(permission)
+            if(chk == PackageManager.PERMISSION_DENIED)
+            {
+                requestPermissions(permission_list, 0)
+            }
         }
     }
 }
