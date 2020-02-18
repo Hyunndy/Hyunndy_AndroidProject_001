@@ -23,44 +23,44 @@ import androidx.core.app.NotificationCompat
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_second.*
 import org.w3c.dom.Text
 import java.util.*
 import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
-    private val SECOND_ACTIVITY = 1
-    private val THIRD_ACTIVITY = 2
+    val SECOND_ACTIVITY = 1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
-        button2.setOnClickListener { view ->
+        button.setOnClickListener { view ->
 
-            // 8. Parcelable 인터페이스를 구현한 클래스 객체를 만든다.
-            var t1 = TestClass()
-            t1.data10 = 100
-            t1.data20 = "문자열2"
+            // 1. 안드로이드OS는 자신이 가지고있는 App의 모든 구성요소를 저장하고있기 때문에 가져올 수 있다.
+            // 다른 어플에서 카카오톡으로 로그인하기 이런 기능들이 모두 이것을 이용해서 하는것이다.
+            var intent = Intent("android.intent.action.SECOND")
 
-            var intent = Intent(this, SecondActivity::class.java)
+            // 2. 다른 App의 Activity를 실행시킬 때 Data전달하기.
+            intent.putExtra("data1", 100)
+            intent.putExtra("data2", 11.11)
 
-            // 9. intent에 TestClass 객체를 넣는다. (정확히는 TestClass가 가진 값들)
-            intent.putExtra("test", t1);
             startActivityForResult(intent, SECOND_ACTIVITY)
+
+
         }
     }
 
-
-    // 12. second 액티비티에서 보낸 데이터 받기.
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(resultCode == Activity.RESULT_OK)
         {
-            var t2 = data?.getParcelableExtra<TestClass>("test2")
-            textView.text = "t2.data1 : ${t2?.data10}\n"
-            textView.append("t2.data2 : ${t2?.data20}")
+            var data1 = data?.getIntExtra("value1", 0)
+            var data2 = data?.getDoubleExtra("value2", 0.0)
+
+            textView.text = "data1 = ${data1}\n"
+            textView.append("data2 = ${data2}")
         }
     }
 }
