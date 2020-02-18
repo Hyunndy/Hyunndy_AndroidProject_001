@@ -32,44 +32,36 @@ import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
-    var brapp1:TestReceiver? = null
+    // 문자 메세지 받을 때 등록을 위해 Permission List
+    var permission_list = arrayOf(
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.RECEIVE_SMS
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
-        addReceiver()
-
-        // 3. Intent를 이용해 BR가동.
-        button.setOnClickListener { view ->
-
-            var intent = Intent(this, TestReceiver::class.java)
-            sendBroadcast(intent)
-        }
+        checkPermission()
     }
 
-    // 안드로이드 8.0 이상에서의 암시적 인텐트는 해당 리시버를 갖고있는 어플이 작동중일 때만 가능하기 때문에
-    // 코드상으로 끄고, 키고를 관리해줘야한다.
-    fun addReceiver()
+    fun checkPermission()
     {
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
         {
             return
         }
 
-        brapp1 = TestReceiver()
-        var filter = IntentFilter("com.test.brapp1")
-        registerReceiver(brapp1, filter)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        if(brapp1 != null)
+        for(permission : String in permission_list)
         {
-            unregisterReceiver(brapp1)
-            brapp1 = null
+            var chk = checkCallingOrSelfPermission(permission)
+            if(chk == PackageManager.PERMISSION_DENIED)
+            {
+                requestPermissions(permission_list, 0)
+                break
+
+            }
         }
     }
 }
