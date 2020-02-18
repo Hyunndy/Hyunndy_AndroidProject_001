@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.DialogInterface.*
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -25,80 +26,50 @@ import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.activity_main.*
 import org.w3c.dom.Text
+import java.sql.Types.NULL
 import java.util.*
 import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
-
-    var permission_list = arrayOf(
-            Manifest.permission.CALL_PHONE)
+    var brapp1:TestReceiver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
-        // 1. 지도 띄우기
+        addReceiver()
+
+        // 3. Intent를 이용해 BR가동.
         button.setOnClickListener { view ->
 
-            // 1.지도를 띄우기 위해 위도 세팅
-            var uri = Uri.parse("geo:37.243243,13861601")
-
-            // 2. 액션뷰
-            //  뭔가를 보여주는 목적으로 쓰임.
-            //  뒤에 들어가는것이 무엇인가(Ex. 위도=지도, url=홈페이지 등)에 따라 뜨는게 다름.
-            var intent = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(intent)
-        }
-
-
-        // 2. 홈페이지 띄우기
-        button2.setOnClickListener { view ->
-
-            var uri = Uri.parse("http://www.naver.com")
-
-            var intent = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(intent)
-        }
-
-
-        // 3. 번호 다이얼 띄우기
-        button3.setOnClickListener { view ->
-
-            var uri = Uri.parse("tel:01020562708")
-
-            var intent = Intent(Intent.ACTION_DIAL, uri)
-            startActivity(intent)
-        }
-
-        // 4. 자동으로 전화걸기
-        // 전화거는건 돈이 나가므로 권한요청이 필요하다.
-        checkPermission()
-
-        button4.setOnClickListener { view ->
-
-            var uri = Uri.parse("tel:01020562708")
-
-            var intent = Intent(Intent.ACTION_CALL, uri)
-            startActivity(intent)
+            var intent = Intent(this, TestReceiver::class.java)
+            sendBroadcast(intent)
         }
     }
 
-    // 4. 전화걸기를 위한 권한 요청
-    fun checkPermission()
+    // 안드로이드 8.0 이상에서의 암시적 인텐트는 해당 리시버를 갖고있는 어플이 작동중일 때만 가능하기 때문에
+    // 코드상으로 끄고, 키고를 관리해줘야한다.
+    fun addReceiver()
     {
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
         {
             return
         }
-        for (permission : String in permission_list)
+
+        brapp1 = TestReceiver()
+        var filter = IntentFilter("com.test.brapp1")
+        registerReceiver(brapp1, filter)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        if(brapp1 != null)
         {
-            var chk = checkCallingOrSelfPermission(permission)
-            if(chk == PackageManager.PERMISSION_DENIED)
-            {
-                requestPermissions(permission_list, 0)
-            }
+            unregisterReceiver(brapp1)
+            brapp1 = null
         }
     }
 }
