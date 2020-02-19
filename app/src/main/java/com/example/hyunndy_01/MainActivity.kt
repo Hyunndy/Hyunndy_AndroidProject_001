@@ -24,8 +24,7 @@ import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.activity_main.*
 import org.w3c.dom.Text
-import java.io.DataInputStream
-import java.io.DataOutputStream
+import java.io.*
 import java.lang.Exception
 import java.sql.Types.NULL
 import java.util.*
@@ -33,28 +32,38 @@ import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
+    var permission_list = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+    // 2. 외부저장소 파일 경로를 담을 변수 생성
+    var path : String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button.setOnClickListener { view ->
 
-            // 1. 예외처리
-            try{
+        // 3. 외부저장소 경로 + "/android/data/" + 패키지명이기 때문에 어플이 삭제되면 같이 삭제된다.
+        path = Environment.getExternalStorageDirectory().absolutePath + "/android/data/" + packageName
 
-                // 2. FileOutputStream 추출 -> 내부저장소와 연결되어있는 스트림.
-                // APPEND : 추가 / PRIVATE : 덮어씀
-                // 내부 저장소에 "myFile"이라는 데이터를 만든거고, 이 파일에다가 데이터를 쓴것.
-                var output = openFileOutput("myFile.dat", Context.MODE_PRIVATE)
+        // 1. 권한 요청
+        checkPermission()
 
-                // 3. 새로 생성한 데이터 쓰기.
+        // 4.path 경로에 해당하는 디렉토리가 없으면 만든다.
+        var file = File(path)
+        if(file.exists() == false)
+        {
+            file.mkdir()
+        }
+
+        button3.setOnClickListener { view ->
+            try {
+
+                var output = FileOutputStream(path + "/sdFile.dat")
                 var dos = DataOutputStream(output)
-                dos.writeInt(100)
-                dos.writeDouble(11.11)
-                dos.writeUTF("안녕하세요")
+                dos.writeInt(200)
+                dos.writeUTF("반갑습니다")
                 dos.flush()
                 dos.close()
-
                 textView.text = "저장완료"
 
             }catch (e : Exception)
@@ -63,29 +72,44 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        button2.setOnClickListener { view ->
+        button4.setOnClickListener { view ->
 
             try {
 
                 // 4. dataInputStream 추출
-                var input = openFileInput("myFile.dat")
+                var input = FileInputStream(path + "/sdFile.dat")
 
                 // 5. 데이터 읽어오기.
                 var dis = DataInputStream(input)
                 var value1 = dis.readInt()
-                var value2 = dis.readDouble()
-                var value3 = dis.readUTF()
+                var value2 = dis.readUTF()
                 dis.close()
 
                 textView.text = "value1 : ${value1}\n"
                 textView.append("value2 : ${value2}\n")
-                textView.append("value3 : ${value3}\n")
 
             }catch (e : Exception)
             {
                 e.printStackTrace()
             }
         }
+    }
 
+
+    fun checkPermission()
+    {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+        {
+            return
+        }
+
+        for(permission in permission_list)
+        {
+            var chk = checkCallingOrSelfPermission(permission)
+            if(chk == PackageManager.PERMISSION_DENIED)
+            {
+                requestPermissions(permission_list, 0)
+            }
+        }
     }
 }
