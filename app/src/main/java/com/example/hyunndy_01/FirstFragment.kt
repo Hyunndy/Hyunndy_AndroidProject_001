@@ -1,43 +1,65 @@
 package com.example.hyunndy_01
 
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
+import android.content.DialogInterface.BUTTON_POSITIVE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.ListFragment
+import kotlinx.android.synthetic.main.activity_main.*
 import org.w3c.dom.Text
 
 /**
  * A simple [Fragment] subclass.
  */
-class FirstFragment : ListFragment() {
+class FirstFragment : DialogFragment() {
 
-    // 1. 리스트뷰를 구성하기위해 필요한 객체들.
-    var textView: TextView? = null
-    var list = arrayOf("항목1", "항목2", "항목3")
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
+        // 4. 리스너 세팅
+        var listner = DialogListner()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+        // 1. AlertDiaglouge 생성
+        var builder = AlertDialog.Builder(activity)
+        builder.setTitle("타이틀입니다")
+        builder.setMessage("메세지 입니다")
 
-        var view = inflater.inflate(R.layout.fragment_first, container, false)
-        textView = view.findViewById<TextView>(R.id.textView3)
+        builder.setPositiveButton("positive", listner)
+        builder.setNeutralButton("neutral", listner)
+        builder.setNegativeButton("negative", listner)
 
-        // 2. 어댑터 생성
-        var adapter = activity?.let { ArrayAdapter<String>(it, android.R.layout.simple_list_item_1, list) }
-        listAdapter = adapter
+        var alert = builder.create()
 
-        return view
+        return alert
     }
 
-    // 3. 리스너 생성
-    override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
-        super.onListItemClick(l, v, position, id)
 
-        var str = list[position]
-        textView?.text = str
+    // 4. 리스너 세팅
+    inner class DialogListner : DialogInterface.OnClickListener{
+        override fun onClick(dialog: DialogInterface?, which: Int) {
+            var main_activity = activity as MainActivity
+
+            when(which)
+            {
+                DialogInterface.BUTTON_POSITIVE ->
+                {
+                    main_activity.textView4.text = "긍정"
+                }
+                DialogInterface.BUTTON_NEUTRAL ->
+                {
+                    main_activity.textView4.text = "중립"
+                }
+                DialogInterface.BUTTON_NEGATIVE ->
+                {
+                    main_activity.textView4.text = "부정"
+                }
+            }
+        }
     }
 }

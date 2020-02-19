@@ -30,14 +30,14 @@ import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
-    var list_fragment = FirstFragment()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var tran = supportFragmentManager.beginTransaction()
-        tran.replace(R.id.container, list_fragment)
-        tran.commit()
+        // 3. 메인에서 바로 AlertDiaglog를 띄운다.
+        button.setOnClickListener { view ->
+            var dialog = FirstFragment()
+            dialog.show(supportFragmentManager, "tag")
+        }
     }
 }
