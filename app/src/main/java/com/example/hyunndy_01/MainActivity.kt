@@ -31,34 +31,37 @@ import kotlin.collections.HashMap
 class MainActivity : AppCompatActivity() {
 
     // 1. 사용할 프래그먼트들의 객체를 생성
-    var first = FirstFragment()
-    var second = SecondFragment()
+    var input_fragment = FirstFragment()
+    var result_fragment = SecondFragment()
+
+    // 4. 프래그먼트1의 EditText를 프래그먼트2에 전달할 변수 선언
+    var value1:String? = null
+    var value2:String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 2. 첫번째 프래그먼트 세팅.
-        button.setOnClickListener { view ->
-            // 2. 하위버전까지 지원하려면 supportFragmnetManager.
-            var tran = supportFragmentManager.beginTransaction()
+        setFragment("input")
+    }
 
-            // 3. id가 container인 레이아웃에 first라는 프래그먼트를 넣는다.
-            tran.add(R.id.container, first)
-
-            // 4. BackButton으로 프래그먼트를 제거할 수 있도록 적용.
-            tran.addToBackStack(null)
-            tran.commit()
+    // 2. Activity에 배치할 Fragment 세팅
+    fun setFragment(name : String)
+    {
+        var tran = supportFragmentManager.beginTransaction()
+        when(name)
+        {
+            "input"->
+            {
+                tran.replace(R.id.container, input_fragment)
+            }
+            "result"->
+            {
+                tran.replace(R.id.container, result_fragment)
+                tran.addToBackStack(null)
+            }
         }
 
-        // 3. 두번째 프래그먼트 세팅.
-        button2.setOnClickListener { view ->
-
-            var tran = supportFragmentManager.beginTransaction()
-
-            tran.replace(R.id.container, second)
-            tran.addToBackStack(null)
-            tran.commit()
-        }
+        tran.commit()
     }
 }
