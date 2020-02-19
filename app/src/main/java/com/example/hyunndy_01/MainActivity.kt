@@ -30,38 +30,14 @@ import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
-    // 1. 사용할 프래그먼트들의 객체를 생성
-    var input_fragment = FirstFragment()
-    var result_fragment = SecondFragment()
-
-    // 4. 프래그먼트1의 EditText를 프래그먼트2에 전달할 변수 선언
-    var value1:String? = null
-    var value2:String? = null
+    var list_fragment = FirstFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setFragment("input")
-    }
-
-    // 2. Activity에 배치할 Fragment 세팅
-    fun setFragment(name : String)
-    {
         var tran = supportFragmentManager.beginTransaction()
-        when(name)
-        {
-            "input"->
-            {
-                tran.replace(R.id.container, input_fragment)
-            }
-            "result"->
-            {
-                tran.replace(R.id.container, result_fragment)
-                tran.addToBackStack(null)
-            }
-        }
-
+        tran.replace(R.id.container, list_fragment)
         tran.commit()
     }
 }

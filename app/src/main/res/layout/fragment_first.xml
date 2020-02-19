@@ -6,23 +6,17 @@
     android:orientation="vertical"
     tools:context=".FirstFragment">
 
-    <EditText
-        android:id="@+id/editText2"
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-    <EditText
-        android:id="@+id/editText"
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        android:layout_height="match_parent"
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="입력완료" />
+        android:id="@android:id/list"/>
+
 </LinearLayout>

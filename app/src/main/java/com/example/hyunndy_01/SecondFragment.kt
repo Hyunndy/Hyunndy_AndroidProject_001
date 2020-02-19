@@ -26,23 +26,9 @@ class SecondFragment : Fragment() {
 
 
         var view = inflater!!.inflate(R.layout.fragment_second, container, false)
-        button = view.findViewById<Button>(R.id.button2)
-        edit1 = view.findViewById<TextView>(R.id.textView)
-        edit2 = view.findViewById<TextView>(R.id.textView2)
 
-        var main_activity = activity as MainActivity
-        // 6. 메인액티비티에 세팅된 프래그먼트1의 텍스트를 가져옴.
-        edit1?.text = main_activity.value1
-        edit2?.text = main_activity.value2
-
-
-        button?.setOnClickListener {view->
-            main_activity.supportFragmentManager.popBackStack()
-        }
 
 
         return view
     }
-
-
 }
