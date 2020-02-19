@@ -18,7 +18,7 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="서비스스타트" />
+        android:text="밑에레이아웃에프래그먼트생성" />
 
     <Button
         android:id="@+id/button2"
@@ -26,15 +26,11 @@
         android:layout_height="wrap_content"
         android:text="서비스스탑" />
 
-    <Button
-        android:id="@+id/button3"
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="인텐트서비스스타트" />
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="포그라운드 서비스 " />
+    </FrameLayout>
+
 </LinearLayout>
